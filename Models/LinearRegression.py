@@ -37,11 +37,10 @@ class LinearRegression:
     def __init__(self, learning_rate = 0.01, num_epochs = 100):
         self.lr = learning_rate
         self.epochs = num_epochs
-        self.w = 0
         self.b = 0
         
     def predict_raw(self, X):
-        y_pred = (self.w * X) + self.b
+        y_pred = (np.dot(self.w, X)) + self.b
         return y_pred
     
     def compute_loss(self, y_pred, y_actual):
@@ -49,14 +48,15 @@ class LinearRegression:
         return loss
     
     def compute_gradients(self, X, y_actual, y_pred):
-        dw = -2/len(y_actual) * np.sum((y_actual - y_pred)*X)
+        dw = -2/len(y_actual) * (np.dot(np.transpose(X), (y_actual - y_pred)))
         db = -2/len(y_actual) * np.sum((y_actual - y_pred))
         return dw, db
     
     def fit(self, X, y):
+        self.w = np.zeros(X.shape[1])
         for n in range(self.epochs):
             preds = self.predict_raw(X)
-            dw,db =  self.compute_gradients(y, preds)
+            dw,db =  self.compute_gradients(X, y, preds)
             self.w = self.w - self.lr * dw
             self.b = self.b - self.lr * db
         return self.w, self.b
