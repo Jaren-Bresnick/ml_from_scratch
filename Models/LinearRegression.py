@@ -38,6 +38,7 @@ class LinearRegression:
         self.lr = learning_rate
         self.epochs = num_epochs
         self.b = 0
+        self.loss_history = []
         
     def predict_raw(self, X):
         if X.ndim == 1:
@@ -61,6 +62,8 @@ class LinearRegression:
             dw,db =  self.compute_gradients(X, y, preds)
             self.w = self.w - self.lr * dw
             self.b = self.b - self.lr * db
+            loss = self.compute_loss(preds,y)
+            self.loss_history.append(loss)
         return self.w, self.b
         
     def predict(self, X):
