@@ -43,7 +43,7 @@ class LinearRegression:
     def predict_raw(self, X):
         if X.ndim == 1:
             X = X.reshape(1, -1)
-        y_pred = (np.dot(self.w, X)) + self.b
+        y_pred = np.dot(X, self.w) + self.b
         return y_pred
     
     def compute_loss(self, y_pred, y_actual):
