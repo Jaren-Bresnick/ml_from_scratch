@@ -34,13 +34,15 @@ ________________________________________________________________________________
 import numpy as np
 
 class LinearRegression:
-    def __init__(self, learning_rate = 0.01, num_epochs = 100, regularization = None, lambda_ = 1.0):
+    def __init__(self, learning_rate = 0.01, num_epochs = 100, regularization = None, lambda_ = 1.0, use_polynomial = False, degree = 1):
         self.lr = learning_rate
         self.epochs = num_epochs
         self.regularization = regularization
+        self.lambda_ = lambda_
+        self.use_poly = use_polynomial
+        self.degree = degree
         self.b = 0
         self.loss_history = []
-        self.lambda_ = lambda_
         
     def predict_raw(self, X):
         if X.ndim == 1:
