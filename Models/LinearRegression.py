@@ -34,7 +34,7 @@ ________________________________________________________________________________
 import numpy as np
 
 class LinearRegression:
-    def __init__(self, learning_rate = 0.01, num_epochs = 100, regularization = None, lambda_ = 0):
+    def __init__(self, learning_rate = 0.01, num_epochs = 100, regularization = None, lambda_ = 1.0):
         self.lr = learning_rate
         self.epochs = num_epochs
         self.regularization = regularization
