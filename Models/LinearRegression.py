@@ -34,11 +34,13 @@ ________________________________________________________________________________
 import numpy as np
 
 class LinearRegression:
-    def __init__(self, learning_rate = 0.01, num_epochs = 100):
+    def __init__(self, learning_rate = 0.01, num_epochs = 100, regularization = None, lambda_ = 0):
         self.lr = learning_rate
         self.epochs = num_epochs
+        self.regularization = regularization
         self.b = 0
         self.loss_history = []
+        self.lambda_ = lambda_
         
     def predict_raw(self, X):
         if X.ndim == 1:
@@ -53,6 +55,10 @@ class LinearRegression:
     def compute_gradients(self, X, y_actual, y_pred):
         dw = -2/len(y_actual) * (np.dot(np.transpose(X), (y_actual - y_pred)))
         db = -2/len(y_actual) * np.sum((y_actual - y_pred))
+        if self.regularization == "L1":
+            dw += self.lambda_ * np.sign(self.w)
+        elif self.regularization == "L2":
+            dw += self.lambda_ * self.w
         return dw, db
     
     def fit(self, X, y):
