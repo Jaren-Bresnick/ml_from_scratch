@@ -30,8 +30,12 @@ where:
     a = learning rate
 __________________________________________________________________________________________________________________________________________________________________________________
 '''
-
+import sys 
+import os
 import numpy as np
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))
+from Utils.HelperFunctions import expand_polynomial_features
+
 
 class LinearRegression:
     def __init__(self, learning_rate = 0.01, num_epochs = 100, regularization = None, lambda_ = 1.0, use_polynomial = False, degree = 1):
@@ -47,6 +51,8 @@ class LinearRegression:
     def predict_raw(self, X):
         if X.ndim == 1:
             X = X.reshape(1, -1)
+        if self.use_poly == True:
+            X = expand_polynomial_features(X, self.degree)
         y_pred = np.dot(X, self.w) + self.b
         return y_pred
     
@@ -64,15 +70,18 @@ class LinearRegression:
         return dw, db
     
     def fit(self, X, y):
+        if self.use_poly:
+            X = expand_polynomial_features(X, self.degree)
         self.w = np.zeros(X.shape[1])
         for n in range(self.epochs):
-            preds = self.predict_raw(X)
-            dw,db =  self.compute_gradients(X, y, preds)
+            preds = np.dot(X, self.w) + self.b
+            dw, db = self.compute_gradients(X, y, preds)
             self.w = self.w - self.lr * dw
             self.b = self.b - self.lr * db
-            loss = self.compute_loss(preds,y)
+            loss = self.compute_loss(preds, y)
             self.loss_history.append(loss)
         return self.w, self.b
+
         
     def predict(self, X):
         preds = self.predict_raw(X)
